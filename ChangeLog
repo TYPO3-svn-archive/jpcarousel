@@ -1,33 +1,52 @@
+1.2.2
+- Small update manual
+
+1.2.1
+- 1.2.0 did not get uploaded correctly on TER 
+
+1.2.0
+- Added support for Perfect Lightbox, requested by Emile Blume
+- Added support for sk_fancybox, requested by Andre Zitterbart
+- All JS and CSS is now included via the pagerenderer and compressed
+- All JS now is loaded in the footer, requested by Riccardo DeContardi
+- Fixed HTML valid code ending IMG tag of prev and next button with / , reported by  Emile Blume and Dawid Szymcak
+- Buttons of multiple carousels on 1 page now operate independent
+- Sizes of multiple carousels on 1 page and the images can now be different
+- Flexform option added for multiple carousels on 1 page to not load again general CSS
+- Inline style CSS for container moved to head
+- External list items like tt_news do not need unique id anymore in the template, suggested by Alexander Grein (thx for your thoughts and your own examples on this!)
+- Check FAQ before upgrade
+
 1.1.1
-- [Misc] Small update of manual
+- Small update manual
 
 1.1.0
-- [Feature] Images can now have links
-- [Feature] Multiple carousels can be placed on 1 page
-- [Feature] Captions added
-- [Bug] Fixed an error which did not show alts and titles on image carousels without click enlarge. 
-- [Misc] Check FAQ before upgrade
+- Images can now have links
+- Multiple carousels can be placed on 1 page
+- Captions added
+- Fixed a bug which did not show alts and titles on image carousels without click enlarge. 
+- Check FAQ before upgrade
 
 1.0.5
-- [Bug] Locallang.xml had a syntax error, reported by Janosch Skrobek.
-- [Feature] Improved German translation, thx to Janosch Skrobek.
+- Bug fix. Locallang.xml had a syntax error, reported by Janosch Skrobek.
+- Improved German translation, thx to Janosch Skrobek.
 
 1.0.4
-- [Feature] German translation added, thx to Andi Becker
-- [Misc] Cleaned php class of some hidden characters which gave problems on Apple, thx to Christian Frisch and Janosch Skrobek
+- German translation added, thx to Andi Becker
+- Cleaned php class of some hidden characters which caused problems on Apple, thx to Christian Frisch and Janosch Skrobek
 
 1.0.3
-- [Misc] Small update of manual
+- Small update of manual 
 
 1.0.2
-- [Feature] NoConflict mode for jQuery inserted in head, thx to Sébastian Delcroix
-- [Misc] Update of manual
-- [Feature] French translation added, thx to Sébastian Delcroix
-- [Feature] Polish translation added, thx to Leszek Ł.
+- NoConflict mode for jQuery inserted in head, thx to Sébastian Delcroix
+- Update manual
+- French translation added, thx to Sébastian Delcroix
+- Polish translation added, thx to Leszek .
 
 1.0.1
-- [Misc] Setting status to beta, 
-- [Misc] Update of manual
+- Setting status to beta, small manual adjustments
 
 1.0.0
 - Initial release
+

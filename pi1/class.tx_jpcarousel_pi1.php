@@ -187,8 +187,6 @@ class tx_jpcarousel_pi1 extends tslib_pibase {
 
         // configure Fred's JS
         $carouFredSelConfig = <<<HEREDOC
-        <script type="text/javascript">
-         /*<![CDATA[*/
          jQuery(document).ready(function() {
          jQuery('#$currentCeID .$carouselID').carouFredSel(
          {
@@ -222,8 +220,6 @@ class tx_jpcarousel_pi1 extends tslib_pibase {
             }
          );
          });
-         /*]]>*/
-        </script>
 HEREDOC;
 
 
@@ -248,23 +244,6 @@ HEREDOC;
         if ($this->lConf['pathToJPcarouselCSS']) {
             $pathToJPcarouselCSS=$this->lConf['pathToJPcarouselCSS'];
         }
-        // insert js, CSS and configuration js in header
-        #echo $header."123<br/>";
-        //$ext_key
-        if ($includeOwnJqueryLib) {
-        $GLOBALS['TSFE']->additionalHeaderData[$ext_key] = $header . '<script src="'.$GLOBALS['TSFE']->tmpl->getFileName($this->conf['pathToJquery']).'" type="text/javascript"></script>
-<script src="' . $GLOBALS['TSFE']->tmpl->getFileName( $pathToJPcarouselJS ) . '" type="text/javascript"></script>';
-        }
-        else {
-        $GLOBALS['TSFE']->additionalHeaderData[$ext_key] = $header . '<script src="' . $GLOBALS['TSFE']->tmpl->getFileName( $pathToJPcarouselJS ) . '" type="text/javascript"></script>';
-        }
-        # if CSS should be loaded (checkbox in Flexform)
-        if ($this->lConf['includeCSS']) {
-            $loadJPcarouselCSS = '<link rel="stylesheet" href="' . $GLOBALS['TSFE']->tmpl->getFileName( $pathToJPcarouselCSS ) . '" type="text/css" media="screen" />';
-        } else { $loadJPcarouselCSS=''; }
-        $GLOBALS['TSFE']->additionalHeaderData[$currentCeID.$carouselID] = $header . $loadJPcarouselCSS .
-'<style type="text/css">#'.$currentCeID.' .'.$carouselID.' li {width:'.$li_width.'px; height:'.$li_height.'px;}</style>'
-                .$carouFredSelConfig;
 
 
         // if image links in flexform, fill link array
@@ -446,8 +425,8 @@ HEREDOC;
         // Create buttons HTML if useButtons in flexform = 1
         $useButtons = $this->lConf['useButtons'];
         if($useButtons==1) {
-            $buttonLeftCarousel = '<a href="#" class="carouselprev" id="prev'.$currentCeID.'" title="'.$this->conf['altTitlePreviousButton'].'"><img title="'.$this->conf['altTitlePreviousButton'].'" alt="'.$this->conf['altTitlePreviousButton'].'" src="'.$this->cObj->fileResource($this->conf['pathToButtons']).'clear.gif"></a>';
-            $buttonRightCarousel = '<a href="#" class="carouselnext" id="next'.$currentCeID.'" title="'.$this->conf['altTitleNextButton'].'"><img title="'.$this->conf['altTitleNextButton'].'" alt="'.$this->conf['altTitleNextButton'].'" src="'.$this->cObj->fileResource($this->conf['pathToButtons']).'clear.gif"></a>';
+            $buttonLeftCarousel = '<a href="#" class="carouselprev" id="prev'.$currentCeID.'" title="'.$this->conf['altTitlePreviousButton'].'"><img title="'.$this->conf['altTitlePreviousButton'].'" alt="'.$this->conf['altTitlePreviousButton'].'" src="'.$this->cObj->fileResource($this->conf['pathToButtons']).'clear.gif" /></a>';
+            $buttonRightCarousel = '<a href="#" class="carouselnext" id="next'.$currentCeID.'" title="'.$this->conf['altTitleNextButton'].'"><img title="'.$this->conf['altTitleNextButton'].'" alt="'.$this->conf['altTitleNextButton'].'" src="'.$this->cObj->fileResource($this->conf['pathToButtons']).'clear.gif" /></a>';
             #$buttonLeftCarousel = '<button class="prev">&lt;&lt;</button>';
             #$buttonRightCarousel = '<button class="next">&gt;&gt;</button>';
         }
@@ -472,7 +451,27 @@ HEREDOC;
             $carousel_title = '<h3 class="carousel_title">'.$this->pi_getFFvalue($piFlexForm, 'carouselTitle', 'features').'</h3>';
         }
 
-
+        
+        
+        // insert js, CSS and configuration js in header
+        if ($includeOwnJqueryLib) {
+        #load jquery if needed
+        $GLOBALS['TSFE']->getPageRenderer()->addJsFooterFile($GLOBALS['TSFE']->tmpl->getFileName($this->conf['pathToJquery']), $type = 'text/javascript', $compress = TRUE, $forceOnTop = FALSE, $allWrap = '');        
+        }
+        #load jquery.carouFredSel.js
+        $GLOBALS['TSFE']->getPageRenderer()->addJsFooterFile($GLOBALS['TSFE']->tmpl->getFileName( $pathToJPcarouselJS ), $type = 'text/javascript', $compress = TRUE, $forceOnTop = FALSE, $allWrap = '');
+        
+        # if general CSS should be loaded (checkbox in Flexform)
+        if ($this->lConf['includeCSS']) {
+           $GLOBALS['TSFE']->getPageRenderer()->addCssFile($GLOBALS['TSFE']->tmpl->getFileName( $pathToJPcarouselCSS ), $rel = 'stylesheet', $media = 'all', $title = '', $compress = TRUE, $forceOnTop = FALSE, $allWrap = '');    
+        }     
+        #load dynamic CSS
+        $dynamicJpCCSS = '#'.$currentCeID.' .'.$carouselID.' li {width:'.$li_width.'px; height:'.$li_height.'px;} #'.$currentCeID.' .carouselContainer {'.$styleCarouselContainer.'}';  
+        $GLOBALS['TSFE']->getPageRenderer()->addCssInlineBlock($currentCeID.$carouselID,$dynamicJpCCSS,$compress = TRUE, $forceOnTop = FALSE);
+        #load dynamic JS
+        $GLOBALS['TSFE']->getPageRenderer()->addJsFooterInlineCode($currentCeID.$carouselID,$carouFredSelConfig, $compress = TRUE, $forceOnTop = FALSE);
+        
+        
 
 
         // Fill marker array
@@ -483,7 +482,6 @@ HEREDOC;
             $ulEnd = '</ul>';
         }
 
-        $markerContainerStyle['###FIELD_CONTAINERSTYLE###'] = $styleCarouselContainer;
         $markerArrayScript['###FIELD_SCRIPT###'] = $javascriptCarousel;
         $markerArrayScript['###FIELD_BUTTON_LEFT###'] = $buttonLeftCarousel;
         $markerArrayScript['###FIELD_BUTTON_RIGHT###'] = $buttonRightCarousel;
@@ -491,7 +489,6 @@ HEREDOC;
 
         // Substitute markers
         $contentItemControl = $this->cObj->substituteMarkerArrayCached($subparts['control'], $markerArrayScript);
-        $contentItemContainerStyle = $this->cObj->substituteMarkerArrayCached($subparts['containerprops'], $markerContainerStyle);
 
 
         // Fill subpart markers
@@ -500,7 +497,6 @@ HEREDOC;
         $subpartArray['###FIELD_UL_END###'] = $ulEnd;
         $subpartArray['###ITEM###'] = $contentItem;
         $subpartArray['###CONTROL###'] = $contentItemControl;
-        $subpartArray['###CONTAINERPROPERTIES###'] = $contentItemContainerStyle;
 
         // Complete the template expansion
         $content = $this->cObj->substituteMarkerArrayCached($subparts['template'], null, $subpartArray);
